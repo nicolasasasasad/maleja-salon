@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculador de Turnos con Porcentaje</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #fce4ec; /* Fondo rosado suave */
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+            background-color: #fff1f3; /* Fondo suave rosado para el contenedor */
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 12px;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #f48fb1; /* Color rosado claro para bordes */
+            box-sizing: border-box;
+        }
+        input:focus, button:focus {
+            outline: none;
+            border: 1px solid #f06292; /* Color más fuerte al enfocar */
+            box-shadow: 0 0 10px rgba(240, 97, 146, 0.5);
+        }
+        label {
+            font-weight: bold;
+            color: #f06292; /* Color rosado más fuerte para los labels */
+        }
+        .result {
+            font-weight: bold;
+            color: #d81b60; /* Color rosado intenso para el resultado */
+        }
+        button {
+            background-color: #f48fb1; /* Botón rosado */
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #f06292; /* Color al pasar el ratón sobre el botón */
+        }
+        .container button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Calculador de Turnos</h2>
+    
+    <label for="turnos60">¿Cuántos turnos son del 60%?</label>
+    <input type="number" id="turnos60" placeholder="Cantidad de turnos 60%" required>
+
+    <label for="turnos70">¿Cuántos turnos son del 70%?</label>
+    <input type="number" id="turnos70" placeholder="Cantidad de turnos 70%" required>
+
+    <button onclick="generarCampos()">Generar Campos para los Turnos</button>
+
+    <div id="turnosDetails"></div> <!-- Aquí se generarán los campos para ingresar los montos -->
+
+    <button onclick="calcularTotal()">Calcular Total</button>
+
+    <p id="resultado" class="result"></p>
+</div>
+
+<script>
+    // Función para generar los campos de entrada para los turnos
+    function generarCampos() {
+        const turnos60 = parseInt(document.getElementById("turnos60").value);
+        const turnos70 = parseInt(document.getElementById("turnos70").value);
+        const turnosDetails = document.getElementById("turnosDetails");
+
+        // Limpiar cualquier campo previo
+        turnosDetails.innerHTML = '';
+
+        // Validar la cantidad de turnos
+        if (isNaN(turnos60) || isNaN(turnos70) || turnos60 <= 0 || turnos70 <= 0) {
+            alert("Por favor, ingresa cantidades válidas para los turnos.");
+            return;
+        }
+
+        // Crear campos para los turnos del 60%
+        for (let i = 1; i <= turnos60; i++) {
+            turnosDetails.innerHTML += `
+                <label for="turno60${i}">Turno ${i} (60%):</label>
+                <input type="number" id="turno60${i}" placeholder="Monto turno ${i}" required><br>
+            `;
+        }
+
+        // Crear campos para los turnos del 70%
+        for (let i = 1; i <= turnos70; i++) {
+            turnosDetails.innerHTML += `
+                <label for="turno70${i}">Turno ${i} (70%):</label>
+                <input type="number" id="turno70${i}" placeholder="Monto turno ${i}" required><br>
+            `;
+        }
+    }
+
+    // Función para calcular el total
+    function calcularTotal() {
+        const turnos60 = parseInt(document.getElementById("turnos60").value);
+        const turnos70 = parseInt(document.getElementById("turnos70").value);
+        
+        let suma60 = 0;
+        let suma70 = 0;
+
+        // Sumar los turnos del 60%
+        for (let i = 1; i <= turnos60; i++) {
+            suma60 += parseFloat(document.getElementById(`turno60${i}`).value) || 0;
+        }
+        const resultado60 = suma60 * 0.6;
+
+        // Sumar los turnos del 70%
+        for (let i = 1; i <= turnos70; i++) {
+            suma70 += parseFloat(document.getElementById(`turno70${i}`).value) || 0;
+        }
+        const resultado70 = suma70 * 0.7;
+
+        // Calcular el total
+        const totalPagar = resultado60 + resultado70;
+
+        // Mostrar el resultado final
+        document.getElementById("resultado").textContent = `Total a pagar: $${totalPagar.toFixed(2)}`;
+    }
+</script>
+
+</body>
+</html>
